@@ -1,45 +1,41 @@
+import { useState, useEffect, useRef } from "react";
 import "../Styles/PaintGrid.css";
-import React, { Component } from "react";
 
-class PaintGrid extends Component {
-    constructor() {
-        super()
-        this.state = {
-            painting: false,
-        }
+const PaintGrid = () => {
+    // States
+    const [painting, setPainting] = useState(false);
+    const [grid, setGrid] = useState('');
+    const canvas = useRef();
+
+    // Load Component & set Grid
+    useEffect(() => {
+        setGrid(canvas.current.getContext('2d'))
+    }, []);
+
+    // Functions
+    const startPainting = (event) => {
+        setPainting(true);
+        draw(event);
     }
 
-    startPainting = () => {
-        this.setState({ painting: true });
-    }
-
-    stopPainting = () => {
-        this.setState({ painting: false });
-    }
-
-    draw = (event) => {
-        if (!this.painting) return;
-        console.log(event)
-    }
-
-    catchMousePosition = (evento) => {
-        let positionX = evento.clientX;
-        let positionY = evento.clientY;
-        let grid = evento.target.getContext('2d');
+    const stopPainting = () => {
+        setPainting(false);
         grid.beginPath();
-        grid.moveTo(100, 100);
-        grid.lineTo(120, 140);
-        grid.stroke();
-        console.log(positionX, positionY);
     }
 
-    render() {
-        return (
-            <div className="grid">
-                <canvas onMouseMove={this.painting && this.draw} onMouseDown={this.startPainting} width="500px" height="500px"></canvas>
-            </div>
-        )
+    const draw = (event) => {
+        if (!painting) return;
+        grid.lineWith = 100;
+        grid.lineCap = 'square';
+        grid.lineTo(event.clientX, event.clientY);
+        grid.stroke();
     }
+
+    return (
+        <div className="grid">
+            <canvas ref={canvas} onMouseMove={draw} onMouseDown={startPainting} onMouseUp={stopPainting} width="500px" height="500px"></canvas>
+        </div >
+    )
 }
 
 export default PaintGrid;
