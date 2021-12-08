@@ -29,7 +29,7 @@ function App() {
     if (!painting) return;
     const currentPositionX = event.clientX - canvas.current.offsetLeft;
     const currentPositionY = event.clientY - canvas.current.offsetTop;
-    grid.lineWith = 100;
+    grid.lineWith = 10;
     grid.lineCap = 'square';
     grid.strokeStyle = paintColor;
     grid.lineTo(currentPositionX, currentPositionY);
